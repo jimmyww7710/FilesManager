@@ -1,7 +1,8 @@
-# React-App-Json-Blog
+# FileManager
 
 ## Description
-A simple items diary web application built with **Node.js** and **Express** for the backend, and **React** for the frontend. Users can add (automatically set current date in), delete, and view items which are stored in a json file. It helps with productivity by tracking of daily work.
+[still working on]
+building a app which can be used for managing files interaction, such as running a file, path setting, or diplaying file thumbnail.
 
 ## Table of Contents
 - [Installation](#installation)
@@ -15,11 +16,11 @@ To get started with the project, follow these steps:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/jimmyww7710/react-app-json-blog.git
+   git clone https://github.com/jimmyww7710/FileManager.git
    ```
 2. Clone the repository:
    ```bash
-    cd react-app-json-blog
+    cd FileManager
    ```
    
 3. Install the backend dependencies:
