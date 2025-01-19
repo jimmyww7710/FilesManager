@@ -1,7 +1,7 @@
 const fs = require('fs');
 const DATA_FILE = 'data.json';
 // Read data
-const getData = (req, res) => {
+const getAllData = (req, res) => {
     // Check if the file exists
     if (!fs.existsSync(DATA_FILE)) {
         // File doesn't exist, create it with an empty array as default content
@@ -19,6 +19,31 @@ const getData = (req, res) => {
                 return res.status(500).json({ error: "Error reading data" });
             }
             res.json(JSON.parse(data || "[]"));
+        });
+    }
+};
+
+const getData = (req, res) => {
+    const id = req.params.id;
+    // Check if the file exists
+    if (!fs.existsSync(DATA_FILE)) {
+        // File doesn't exist, create it with an empty array as default content
+        fs.writeFile(DATA_FILE, JSON.stringify([]), "utf8", (err) => {
+            if (err) {
+                return res.status(500).json({ error: "Error creating file" });
+            }
+            // Send an empty array as the response
+            return res.json([]);
+        });
+    } else {
+        // File exists, read it
+        fs.readFile(DATA_FILE, "utf8", (err, data) => {
+            if (err) {
+                return res.status(500).json({ error: "Error reading data" });
+            }
+            console.log('data:', data);
+            const matchedItem = JSON.parse(data).find((item) => item.id == id);
+            res.json(matchedItem || "");
         });
     }
 };
@@ -81,4 +106,4 @@ const deleteData = (req, res) => {
     });
 };
 
-module.exports = { getData, addData, updateData, deleteData };
+module.exports = { getData, getAllData, addData, updateData, deleteData };

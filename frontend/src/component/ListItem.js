@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import axios from "axios";
 import Popup from './Popup';
 import { MdOutlineRemoveCircleOutline, MdPlayCircleFilled, MdOutlineSubject  } from 'react-icons/md';
 

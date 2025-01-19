@@ -5,7 +5,7 @@ const app = express();
 const PORT = 5000;
 
 const cors = require("cors");
-const { getData, addData, updateData, deleteData } = require('./dataController'); // Import controller functions
+const { getData, getAllData, addData, updateData, deleteData } = require('./dataController'); // Import controller functions
 
 
 app.use(cors());
@@ -14,7 +14,9 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // API routes
-app.get('/api/data', getData);
+app.get('/api/data', getAllData);
+app.get('/api/data/:id', getData);
+
 app.post('/api/data', addData);
 app.put('/api/data/:id', updateData);
 app.delete('/api/data/:id', deleteData);
