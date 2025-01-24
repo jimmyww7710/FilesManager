@@ -40,6 +40,34 @@ const Details = () => {
     }
   };
 
+  const getFileInfo = async (formData) => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/fileInfo', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      // Handle response from backend
+      console.log(response.data); // File path and name can be included in the response
+      if (response.status === 200) {
+        setData((preData) => ({...preData, 
+          content: {
+            ...preData.content,
+            filePath: response.data.filePath,
+            fileName: response.data.fileName
+          }
+        }));
+      }
+      else {
+        alert('getInfo is not completed');
+      }
+      
+    } catch (error) {
+      console.error("Error fetching data", error);
+    }
+  };
+
   const handleTitleChange = (e) => {
     setData((preData) => ({...preData, 
       content: {
@@ -65,6 +93,13 @@ const Details = () => {
         description: e.target.value
       }
     }));
+  }
+
+  const handleFilePathChange = async(e) => {
+    const file = e.target.files[0]
+    const formData = new FormData();
+    formData.append('file', file);
+    getFileInfo(formData);
   }
 
   const handleSave = () => {
@@ -134,6 +169,20 @@ const Details = () => {
         </textarea>}
 
         {!isEdit && <div className="mb-5">{data?.content?.description || ''}</div>}
+
+        {/* <input type="file" id="fileInput"></input> */}
+
+        {isEdit && <input
+          type="file" 
+          value={data?.content?.filePath || ''}
+          onChange={handleFilePathChange}
+          placeholder="select file path"
+          className="w-full h-32 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />}
+
+        {!isEdit && <div className="mb-5">{data?.content?.filePath || ''}</div>}
+
+        <p>Selected file: {data?.content?.fileName}</p>
      
         <div className="flex justify-center">
           {isEdit && 

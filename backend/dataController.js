@@ -1,5 +1,7 @@
 const fs = require('fs');
 const DATA_FILE = 'data.json';
+const path = require('path');
+
 // Read data
 const getAllData = (req, res) => {
     // Check if the file exists
@@ -106,4 +108,38 @@ const deleteData = (req, res) => {
     });
 };
 
-module.exports = { getData, getAllData, addData, updateData, deleteData };
+
+const getFileInfo = (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('No file uploaded.');
+    }
+
+    console.log('req.file:', req.file);
+
+    // Execute file or do whatever processing you need
+    const filePath = path.join(__dirname, req.file.path);
+    return res.json({filePath, fileName: req.file.originalname});
+};
+
+const run =  (req, res) => {
+  const { filePath } = req.body;
+
+  // Check if the file exists
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).json({ message: 'File not found' });
+  }
+
+  // Execute the file (for example, if it's a Python script or a shell script)
+  exec(`node ${filePath}`, (error, stdout, stderr) => {
+    if (error) {
+      return res.status(500).json({ message: `Error executing file: ${error.message}` });
+    }
+    if (stderr) {
+      return res.status(500).json({ message: `stderr: ${stderr}` });
+    }
+    res.json({ message: 'File executed successfully', output: stdout });
+  });
+}
+
+
+module.exports = { getData, getAllData, addData, updateData, deleteData, getFileInfo, run };
