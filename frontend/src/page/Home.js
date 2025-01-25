@@ -110,8 +110,8 @@ const App = () => {
           <div className="w-full mt-5 divide-gray-200">
             {data.filter(item => {
               return item?.content?.title.includes(filterText) || item?.content?.title.includes(filterText) || filterText === ""
-            }).map((item) => (
-              <ListItem item={item} deleteItemHandler={deleteItem}/>
+            }).map((item, index) => (
+              <ListItem key={index} item={item} deleteItemHandler={deleteItem}/>
             ))}
           </div>
         </section>

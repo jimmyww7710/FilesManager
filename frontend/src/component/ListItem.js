@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import Popup from './Popup';
 import { MdOutlineRemoveCircleOutline, MdPlayCircleFilled, MdOutlineSubject  } from 'react-icons/md';
+import axios from "axios";
 
 const ListItem = ({item, deleteItemHandler}) => {
     const navigate = useNavigate();
@@ -15,23 +16,40 @@ const ListItem = ({item, deleteItemHandler}) => {
 
     const closePopup = () => setPopupOpen(false);
 
-    const handleNavigateToDetails = (id) => {
-        navigate(`/Details?id=${id}`);
+    const run = async (filePath) => {
+      try {
+        const response = await axios.post('http://localhost:5000/api/run', {filePath: filePath});
+  
+        // Handle response from backend
+        console.log(response.data); // File path and name can be included in the response
+        if (response.status === 200) {
+         console.log('run filePath');
+        }
+        else {
+          alert('run is not completed');
+        }
+        
+      } catch (error) {
+        console.error("Error fetching data", error);
       }
-    
-      const confirmPopup = async (id) => {
-        setPopupOpen(true);
-        setPopupId(id);
-      };
+    };
+  
 
-//   const fetchData = async () => {
-//     try {
-//       const response = await axios.get("http://localhost:5000/api/data");
-//       setData(response.data);
-//     } catch (error) {
-//       console.error("Error fetching data", error);
-//     }
-//   };
+    const handleNavigateToDetails = (id) => {
+      navigate(`/Details?id=${id}`);
+    }
+    
+    const confirmPopup = async (id) => {
+      setPopupOpen(true);
+      setPopupId(id);
+    };
+
+    const handleRunApp = (filePath = "") => {
+      if (!filePath) {
+        return;
+      }
+      run(filePath);
+    }
 
   return (
     <div>
@@ -40,6 +58,7 @@ const ListItem = ({item, deleteItemHandler}) => {
             <span className="text-gray-700" >{item.date}</span>
             <div className="icons">
                 <button
+                onClick={() => handleRunApp(item.content?.fileTypeInfo?.images[0]?.filePath)}
                 className="text-blue-500 hover:text-blue-600 transition mr-2"
                 >
                 <MdPlayCircleFilled size={25}/>
@@ -58,9 +77,21 @@ const ListItem = ({item, deleteItemHandler}) => {
                 </button>
             </div>
             </div>
-            <div className="post-content">
-            <p className="text-gray-700 text-xl font-bold">{item.content.title}</p>
-            <span className="text-gray-700 text-base">{item.content.summary}</span>
+            <div className="post-content flex gap-2">
+              <div>
+                {item?.content?.fileTypeInfo?.images[0]?.fileGenerateName && (
+                  <img 
+                    src={`http://localhost:5000/images/${item?.content?.fileTypeInfo?.images[0]?.fileGenerateName}`} 
+                    alt="Dynamic Image" 
+                    style={{ width: '300px', height: 'auto' }}
+                    className="mb-2"
+                  />
+                )}
+              </div>
+              <div>
+                <p className="text-gray-700 text-xl font-bold">{item.content.title}</p>
+                <span className="text-gray-700 text-base">{item.content.summary}</span>
+              </div>
             </div>
         </div>
         <Popup isOpen={isPopupOpen} popupId={popupId} closePopup={closePopup} callBack={deleteItemHandler} title={'Confirm to delete this item?'} />

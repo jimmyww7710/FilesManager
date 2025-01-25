@@ -1,6 +1,7 @@
 const fs = require('fs');
 const DATA_FILE = 'data.json';
 const path = require('path');
+const { exec } = require('child_process');
 
 // Read data
 const getAllData = (req, res) => {
@@ -114,11 +115,39 @@ const getFileInfo = (req, res) => {
         return res.status(400).send('No file uploaded.');
     }
 
-    console.log('req.file:', req.file);
+    console.log(req.file);
 
-    // Execute file or do whatever processing you need
+    const fileExtension = path.extname(req.file.originalname).toLowerCase();
     const filePath = path.join(__dirname, req.file.path);
-    return res.json({filePath, fileName: req.file.originalname});
+
+    // Define file type categories
+    const fileTypeInfo = {
+        images: [],
+        script: [],
+        others: []
+    };
+
+    if (['.jpg', '.jpeg', '.png'].includes(fileExtension)) {
+        fileTypeInfo.images.push({
+            filePath: filePath,
+            fileName: req.file.originalname,
+            fileGenerateName: req.file.filename
+        });
+    } else if (['.bat'].includes(fileExtension)) {
+        fileTypeInfo.script.push({
+            filePath: filePath,
+            fileName: req.file.originalname
+        });
+    } else {
+        // Handle other file types here, if needed
+        fileTypeInfo.others.push({
+            filePath: filePath,
+            fileName: req.file.originalname
+        });
+    }
+
+    // Respond with the file type info
+    return res.json({ fileTypeInfo });
 };
 
 const run =  (req, res) => {
@@ -130,7 +159,7 @@ const run =  (req, res) => {
   }
 
   // Execute the file (for example, if it's a Python script or a shell script)
-  exec(`node ${filePath}`, (error, stdout, stderr) => {
+  exec(`cmd /c ${filePath}`, (error, stdout, stderr) => {
     if (error) {
       return res.status(500).json({ message: `Error executing file: ${error.message}` });
     }
