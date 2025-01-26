@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Popup from './Popup';
 import { MdOutlineRemoveCircleOutline, MdPlayCircleFilled, MdOutlineSubject  } from 'react-icons/md';
 import axios from "axios";
+import { backendDomain } from '../util/variables';
 
 const ListItem = ({item, deleteItemHandler}) => {
     const navigate = useNavigate();
@@ -18,7 +19,7 @@ const ListItem = ({item, deleteItemHandler}) => {
 
     const run = async (filePath) => {
       try {
-        const response = await axios.post('http://localhost:5000/api/run', {filePath: filePath});
+        const response = await axios.post('s/api/run', {filePath: filePath});
   
         // Handle response from backend
         console.log(response.data); // File path and name can be included in the response
@@ -81,7 +82,7 @@ const ListItem = ({item, deleteItemHandler}) => {
               <div>
                 {item?.content?.fileTypeInfo?.images[0]?.fileGenerateName && (
                   <img 
-                    src={`http://localhost:5000/images/${item?.content?.fileTypeInfo?.images[0]?.fileGenerateName}`} 
+                    src={`${backendDomain}images/${item?.content?.fileTypeInfo?.images[0]?.fileGenerateName}`} 
                     alt="Dynamic Image" 
                     style={{ width: '300px', height: 'auto' }}
                     className="mb-2"

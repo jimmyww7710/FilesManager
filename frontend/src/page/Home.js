@@ -4,6 +4,7 @@ import axios from "axios";
 import { MdOutlineAddCircleOutline  } from 'react-icons/md';
 
 import ListItem from '../component/ListItem';
+import { backendDomain } from '../util/variables';
 
 const App = () => {
   const [data, setData] = useState([]);
@@ -16,7 +17,7 @@ const App = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/data");
+      const response = await axios.get(`${backendDomain}api/data`);
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data", error);
@@ -27,7 +28,7 @@ const App = () => {
     const id = Date.now().toString(); // Simple unique ID
     try {
       const currentDate = getFormattedDate();
-      const response = await axios.post("http://localhost:5000/api/data", { id, content: newItem, date: currentDate });
+      const response = await axios.post(`${backendDomain}api/data`, { id, content: newItem, date: currentDate });
       setData([...data, response.data]);
       setNewItem("");
     } catch (error) {
@@ -57,7 +58,7 @@ const App = () => {
 
   const deleteItem = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/data/${id}`);
+      await axios.delete(`${backendDomain}api/data/${id}`);
       setData(data.filter((item) => item.id !== id));
     } catch (error) {
       console.error("Error deleting item", error);
@@ -109,7 +110,9 @@ const App = () => {
           />
           <div className="w-full mt-5 divide-gray-200">
             {data.filter(item => {
-              return item?.content?.title.includes(filterText) || item?.content?.title.includes(filterText) || filterText === ""
+              return [item?.content?.title, item?.content?.summary].includes(filterText) || 
+              [item?.content?.title, item?.content?.summary].includes(filterText) || 
+              filterText === ""
             }).map((item, index) => (
               <ListItem key={index} item={item} deleteItemHandler={deleteItem}/>
             ))}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from "axios";
+import { backendDomain } from '../util/variables';
 
 const Details = () => {
    const navigate = useNavigate();
@@ -16,7 +17,7 @@ const Details = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/data/${id}`);
+      const response = await axios.get(`${backendDomain}api/data/${id}`);
       console.log(response.data)
       setData(response.data);
     } catch (error) {
@@ -26,7 +27,7 @@ const Details = () => {
 
   const UpdateData = async () => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/data/${id}`, data);
+      const response = await axios.put(`${backendDomain}api/data/${id}`, data);
       if (response.status === 200) {
         alert('updated successfully');
         setIsEdit(false);
@@ -42,7 +43,7 @@ const Details = () => {
 
   const getFileInfo = async (formData) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/fileInfo', formData, {
+      const response = await axios.post(`${backendDomain}api/fileInfo`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -78,7 +79,7 @@ const Details = () => {
 
   const run = async (filePath) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/run', {filePath: filePath});
+      const response = await axios.post(`${backendDomain}api/run`, {filePath: filePath});
 
       // Handle response from backend
       console.log(response.data); // File path and name can be included in the response
@@ -167,7 +168,7 @@ const Details = () => {
       </div>
         {data?.content?.fileTypeInfo?.images[0]?.fileGenerateName && (
           <img 
-            src={`http://localhost:5000/images/${data?.content?.fileTypeInfo?.images[0]?.fileGenerateName}`} 
+            src={`${backendDomain}images/${data?.content?.fileTypeInfo?.images[0]?.fileGenerateName}`} 
             alt="Dynamic Image" 
             style={{ width: '300px', height: 'auto' }}
             className="mb-2"
