@@ -79,19 +79,18 @@ const ListItem = ({item, deleteItemHandler}) => {
             </div>
             </div>
             <div className="post-content flex gap-2">
-              <div>
+              <div className="flex-shrink-0">
                 {item?.content?.fileTypeInfo?.images[0]?.fileGenerateName && (
                   <img 
                     src={`${backendDomain}images/${item?.content?.fileTypeInfo?.images[0]?.fileGenerateName}`} 
-                    alt="Dynamic Image" 
-                    style={{ width: '300px', height: 'auto' }}
-                    className="mb-2"
+                    alt="Dynamic Image"
+                    className="mb-2 w-[300px] h-auto"
                   />
                 )}
               </div>
               <div>
                 <p className="text-gray-700 text-xl font-bold">{item.content.title}</p>
-                <span className="text-gray-700 text-base">{item.content.summary}</span>
+                <span className="text-gray-700 text-base overflow-hidden line-clamp-5">{item.content.summary}</span>
               </div>
             </div>
         </div>
