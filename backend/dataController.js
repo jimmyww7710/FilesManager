@@ -118,7 +118,7 @@ const getFileInfo = (req, res) => {
     console.log(req.file);
 
     const fileExtension = path.extname(req.file.originalname).toLowerCase();
-    const filePath = path.join(__dirname, req.file.path);
+    const filePath = path.join(__dirname, `uploads/${req.file.filename}`);
 
     // Define file type categories
     const fileTypeInfo = {

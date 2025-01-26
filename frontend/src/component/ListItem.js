@@ -19,7 +19,7 @@ const ListItem = ({item, deleteItemHandler}) => {
 
     const run = async (filePath) => {
       try {
-        const response = await axios.post('s/api/run', {filePath: filePath});
+        const response = await axios.post(`${backendDomain}api/run`, {filePath: filePath});
   
         // Handle response from backend
         console.log(response.data); // File path and name can be included in the response
@@ -59,7 +59,7 @@ const ListItem = ({item, deleteItemHandler}) => {
             <span className="text-gray-700" >{item.date}</span>
             <div className="icons">
                 <button
-                onClick={() => handleRunApp(item.content?.fileTypeInfo?.images[0]?.filePath)}
+                onClick={() => handleRunApp(item.content?.fileTypeInfo?.script[0]?.filePath)}
                 className="text-blue-500 hover:text-blue-600 transition mr-2"
                 >
                 <MdPlayCircleFilled size={25}/>
