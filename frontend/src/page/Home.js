@@ -109,7 +109,7 @@ const App = () => {
             className="px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 border border-gray-300"
           />
           <div className="w-full mt-5 divide-gray-200">
-            {data.filter(item => {
+            {[...data].reverse().filter(item => {
               return [item?.content?.title, item?.content?.summary].includes(filterText) || 
               [item?.content?.title, item?.content?.summary].includes(filterText) || 
               filterText === ""
